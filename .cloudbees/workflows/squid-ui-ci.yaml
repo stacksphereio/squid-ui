@@ -62,7 +62,7 @@ jobs:
       uses_liquibase: false
       hostname: squid.dev.stacksphereio.se-main-demo.sa-demo.beescloud.com
       feature_flags_enabled: true
-      feature_flags_secret_name: feature-mgmt
+      feature_flags_secret_name: squid-ui-fmkey
       feature_flags_secret_key: FM_KEY
       feature_flags_create_secret: true
     secrets: inherit
@@ -85,7 +85,7 @@ jobs:
       uses_liquibase: false
       hostname: squid.integ.stacksphereio.se-main-demo.sa-demo.beescloud.com
       feature_flags_enabled: true
-      feature_flags_secret_name: feature-mgmt
+      feature_flags_secret_name: squid-ui-fmkey
       feature_flags_secret_key: FM_KEY
       feature_flags_create_secret: true
     secrets: inherit

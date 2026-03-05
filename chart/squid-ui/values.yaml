@@ -103,7 +103,7 @@ autoscaling:
 # --- Feature Management (CloudBees FM) ---
 featureFlags:
   enabled: true                 # keep your current setting
-  secretName: feature-mgmt      # name of the K8s Secret to use/create
+  secretName: squid-ui-fmkey    # component-specific FM secret name
   secretKey: FM_KEY             # key inside the Secret (do not change)
   mountPath: /usr/share/nginx/html/config
   fileName: fm.json
