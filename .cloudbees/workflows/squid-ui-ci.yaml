@@ -58,8 +58,8 @@ jobs:
       docker_repo: ${{ vars.DOCKER_USER }}/squid-ui
       artifact_id: ${{ needs.build.outputs.PRIMARY_ARTIFACT_ID }}
       commit_sha: ${{ cloudbees.scm.sha }}
-      uses_postgres: false
-      uses_liquibase: false
+      database_mode: "no-database"
+      enable_liquibase: "false"
       hostname: squid.dev.stacksphereio.se-main-demo.sa-demo.beescloud.com
       feature_flags_enabled: true
       feature_flags_secret_name: squid-ui-fmkey
@@ -81,8 +81,8 @@ jobs:
       docker_repo: ${{ vars.DOCKER_USER }}/squid-ui
       artifact_id: ${{ needs.build.outputs.PRIMARY_ARTIFACT_ID }}
       commit_sha: ${{ cloudbees.scm.sha }}
-      uses_postgres: false
-      uses_liquibase: false
+      database_mode: "no-database"
+      enable_liquibase: "false"
       hostname: squid.integ.stacksphereio.se-main-demo.sa-demo.beescloud.com
       feature_flags_enabled: true
       feature_flags_secret_name: squid-ui-fmkey
