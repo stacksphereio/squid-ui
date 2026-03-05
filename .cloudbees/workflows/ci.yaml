@@ -30,7 +30,7 @@ jobs:
       component_name: squid-ui
       language: node
       coverage_root: src
-      enable_smart_tests: ${{ inputs.enable_smart_tests || 'true' }}
+      enable_smart_tests: "true"
     secrets: inherit
     vars: inherit
 
