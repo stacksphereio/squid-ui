@@ -1,6 +1,15 @@
+# StackSphere squid-ui CI Pipeline
+# ARCH VERSION: 0.5
+# Purpose: Automated CI/CD with dev/integ deployment
+
 apiVersion: automation.cloudbees.io/v1alpha1
 kind: workflow
-name: squid-ui CI/CD
+name: squid-ui CI
+
+permissions:
+  scm-token-own: read
+  scm-token-org: read
+  id-token: write
 
 on:
   push:
@@ -8,58 +17,67 @@ on:
       - "**"
   workflow_dispatch:
     inputs:
-      run_mode:
-        description: "Run mode: full or deploy_only"
-        required: false
-        type: string
-        default: "full"
       enable_smart_tests:
-        description: "Enable CloudBees Smart Tests"
+        description: "Enable CloudBees Smart Tests integration"
         required: false
         type: string
         default: "true"
 
-permissions:
-  scm-token-own: read
-  scm-token-org: read
-  id-token: write
-
 jobs:
   test:
-    if: ${{ inputs.run_mode != 'deploy_only' }}
-    uses: stacksphereio/core-workflows/.cloudbees/workflows/component-test.yaml@main
+    uses: github.com/stacksphereio/core-workflows/.cloudbees/workflows/component-test.yaml@main
     with:
       component_name: squid-ui
       language: node
       coverage_root: src
-      debug: "false"
       enable_smart_tests: ${{ inputs.enable_smart_tests || 'true' }}
     secrets: inherit
     vars: inherit
 
   build:
-    if: ${{ inputs.run_mode != 'deploy_only' }}
-    needs: [test]
-    uses: stacksphereio/core-workflows/.cloudbees/workflows/component-build.yaml@main
+    needs: test
+    uses: github.com/stacksphereio/core-workflows/.cloudbees/workflows/component-build.yaml@main
     with:
       component_name: squid-ui
       docker_user: ${{ vars.DOCKER_USER }}
       commit_sha: ${{ cloudbees.scm.sha }}
       push_latest: "true"
-    secrets:
-      DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
+    secrets: inherit
+    vars: inherit
 
-  deploy-component:
-    if: ${{ cloudbees.scm.branch == 'main' || inputs.run_mode == 'deploy_only' }}
-    needs: [build]
+  deploy-dev:
+    if: ${{ cloudbees.scm.branch != 'main' }}
+    needs: build
+    environment: dev
+    uses: github.com/stacksphereio/core-workflows/.cloudbees/workflows/component-deploy.yaml@main
+    with:
+      component_name: squid-ui
+      version: ${{ needs.build.outputs.VERSION }}
+      environment: dev
+      stack_name: squid
+      docker_repo: ${{ vars.DOCKER_USER }}/squid-ui
+      artifact_id: ${{ needs.build.outputs.PRIMARY_ARTIFACT_ID }}
+      commit_sha: ${{ cloudbees.scm.sha }}
+      uses_postgres: false
+      uses_liquibase: false
+      hostname: squid.dev.stacksphereio.se-main-demo.sa-demo.beescloud.com
+      feature_flags_enabled: true
+      feature_flags_secret_name: feature-mgmt
+      feature_flags_secret_key: FM_KEY
+      feature_flags_create_secret: true
+    secrets: inherit
+    vars: inherit
+
+  deploy-integ:
+    if: ${{ cloudbees.scm.branch == 'main' }}
+    needs: build
     environment: integ
-    uses: stacksphereio/core-workflows/.cloudbees/workflows/component-deploy.yaml@main
+    uses: github.com/stacksphereio/core-workflows/.cloudbees/workflows/component-deploy.yaml@main
     with:
       component_name: squid-ui
       version: ${{ needs.build.outputs.VERSION }}
       environment: integ
       stack_name: squid
-      org_name: stacksphereio
       docker_repo: ${{ vars.DOCKER_USER }}/squid-ui
       artifact_id: ${{ needs.build.outputs.PRIMARY_ARTIFACT_ID }}
       commit_sha: ${{ cloudbees.scm.sha }}
@@ -70,7 +88,18 @@ jobs:
       feature_flags_secret_name: feature-mgmt
       feature_flags_secret_key: FM_KEY
       feature_flags_create_secret: true
-      replica_count: "1"
-      image_pull_policy: Always
+    secrets: inherit
+    vars: inherit
+
+  trigger-release:
+    if: false  # Disabled - stack release not yet implemented
+    needs: [build, deploy-integ]
+    uses: github.com/stacksphereio/core-workflows/.cloudbees/workflows/application-release.yaml@main
+    with:
+      stack_name: squid
+      triggering_component: squid-ui
+      version: ${{ needs.build.outputs.VERSION }}
+      target_environment: integ
+      baseline_environment: prod
     secrets: inherit
     vars: inherit
