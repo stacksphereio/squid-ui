@@ -1,0 +1,107 @@
+apiVersion: automation.cloudbees.io/v1alpha1
+kind: workflow
+name: Universal CI - ${{ env.APP_NAME }}
+on:
+  push:
+    branches:
+      - "**"
+  workflow_dispatch:
+permissions:
+  scm-token-own: read
+  scm-token-org: read
+  id-token: write
+env:
+  APP_NAME: squid-ui
+  LANGUAGE: node
+  COVERAGE_ROOT: src
+  DEBUG: "true"
+  
+
+jobs:
+  test:
+    uses: github.com/cb-squidstack/cb-squidstack/.cloudbees/workflows/test-generic.yaml@main
+    with:
+      app_name: squid-ui
+      language: node
+      coverage_root: src
+      debug: "true"
+      enable_smart_tests: "true"
+    secrets: inherit
+    vars: inherit
+
+  build:
+    uses: github.com/cb-squidstack/cb-squidstack/.cloudbees/workflows/build-generic.yaml@main
+    with:
+      app_name: squid-ui
+      docker_user: ${{ vars.DOCKER_USER }}
+      commit_sha: ${{ cloudbees.scm.sha }}
+      push_latest: "true"
+      debug: "true"
+    secrets:
+      docker_token: ${{ secrets.DOCKER_TOKEN }}
+    vars: inherit
+
+  deployDev:
+    if: ${{ cloudbees.scm.branch != 'main' }}
+    environment: squid-dev
+    uses: github.com/cb-squidstack/cb-squidstack/.cloudbees/workflows/deploy-generic.yaml@main
+    needs: [test, build]
+    with:
+      component_name: squid-ui
+      environment_name: squid-dev
+      docker_repo: ${{ vars.DOCKER_USER }}/squid-ui
+      artifact_id: ${{ needs.build.outputs.PRIMARY_ARTIFACT_ID }}
+      version: ${{ needs.build.outputs.VERSION }}
+      commit_sha: ${{ cloudbees.scm.sha }}
+      hostname: squid-dev.guru-rep.sa-demo.beescloud.com
+      feature_flags_enabled: "true"
+    secrets: inherit
+    vars: inherit
+
+  deployPreProd:
+    if: ${{ cloudbees.scm.branch == 'main' }}
+    environment: squid-preprod
+    uses: github.com/cb-squidstack/cb-squidstack/.cloudbees/workflows/deploy-generic.yaml@main
+    needs: [test, build]
+    with:
+      component_name: squid-ui
+      environment_name: squid-preprod
+      docker_repo: ${{ vars.DOCKER_USER }}/squid-ui
+      artifact_id: ${{ needs.build.outputs.PRIMARY_ARTIFACT_ID }}
+      version: ${{ needs.build.outputs.VERSION }}
+      commit_sha: ${{ cloudbees.scm.sha }}
+      hostname: squid-preprod.guru-rep.sa-demo.beescloud.com
+      feature_flags_enabled: "true"
+    secrets: inherit
+    vars: inherit
+    
+  deployProd:
+    if: ${{ cloudbees.scm.branch == 'main' }}
+    environment: squid-prod
+    uses: github.com/cb-squidstack/cb-squidstack/.cloudbees/workflows/deploy-generic.yaml@main
+    needs: [test, build, deployPreProd]
+    with:
+      component_name: squid-ui
+      environment_name: squid-prod
+      docker_repo: ${{ vars.DOCKER_USER }}/squid-ui
+      artifact_id: ${{ needs.build.outputs.PRIMARY_ARTIFACT_ID }}
+      version: ${{ needs.build.outputs.VERSION }}
+      commit_sha: ${{ cloudbees.scm.sha }}
+      hostname: squid.guru-rep.sa-demo.beescloud.com
+      feature_flags_enabled: "true"
+    secrets: inherit
+    vars: inherit
+    
+  triggerRelease:
+    if: false  # Disabled to avoid Unify rate limits - change to 'cloudbees.scm.branch == main' to enable
+    needs: [test, build, deployPreProd]
+    uses: github.com/cb-squidstack/cb-squidstack/.cloudbees/workflows/release-generic.yaml@main
+    with:
+      component_name: squid-ui
+      component_id: "0459d9f1-4f37-4db1-bfb4-e2e1731a0975"
+      version: ${{ needs.build.outputs.VERSION }}
+      smart_tests_build_name: ${{ needs.test.outputs.SMART_TESTS_BUILD_NAME }}
+      environment: squid-demo-3
+      release_name_prefix: "squid-ui"
+    secrets: inherit
+    vars: inherit  

@@ -1,0 +1,13 @@
+apiVersion: v2
+name: squid-ui
+description: Squid UI (React app served by Nginx) chart
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+kubeVersion: ">=1.23.0-0"
+home: https://example.com/squid-ui
+maintainers:
+  - name: squidstack
+    email: ops@example.com
+sources:
+  - https://github.com/<org>/<repo>

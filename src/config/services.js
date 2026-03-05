@@ -1,0 +1,95 @@
+// Central registry of services the UI knows about.
+// requiredBy: "ui" | "other"
+export const SERVICES = [
+  {
+    key: "kraken-auth",
+    name: "Kraken Auth",
+    url: "/api/kraken-auth/health",
+    requiredBy: "ui",
+    notes: "Login/auth for UI",
+  },
+  {
+    key: "nautilus-inventory",
+    name: "Nautilus Inventory",
+    url: "/api/nautilus-inventory/health",
+    requiredBy: "ui",
+    notes: "Product & stock shown in UI",
+  },
+  {
+    key: "clam-catalog",
+    name: "Clam Catalog",
+    url: "/api/clam-catalog/health",
+    requiredBy: "ui",
+    notes: "Product catalog API",
+  },
+  {
+    key: "codlocker-assets",
+    name: "Codlocker Assets",
+    url: "/api/codlocker-assets/health",
+    requiredBy: "ui",
+    notes: "Static assets & product images",
+  },
+  {
+    key: "jellyfish-notifications",
+    name: "Jellyfish Notifications",
+    url: "/api/jellyfish-notifications/health",
+    requiredBy: "other",
+    notes: "SSE notifications (optional for browsing)",
+  },
+  {
+    key: "squid-recommendations",
+    name: "Squid Recommendations",
+    url: "/api/squid-recommendations/health",
+    requiredBy: "ui",
+    notes: "Recommendations panel",
+  },
+  {
+    key: "barnacle-reviews",
+    name: "Barnacle Reviews",
+    url: "/api/barnacle-reviews/health",
+    requiredBy: "ui",
+    notes: "Ratings & reviews block",
+  },
+  {
+    key: "manta-delivery",
+    name: "Manta Delivery",
+    url: "/api/manta-delivery/health",
+    requiredBy: "other",
+    notes: "Delivery workflow",
+  },
+  {
+    key: "octopus-payments",
+    name: "Octopus Payments",
+    url: "/api/octopus-payments/health",
+    requiredBy: "other",
+    notes: "Checkout",
+  },
+  {
+    key: "cuttlefish-orders",
+    name: "Cuttlefish Orders",
+    url: "/api/cuttlefish-orders/health",
+    requiredBy: "other",
+    notes: "Order management",
+  },
+  {
+    key: "urchin-analytics",
+    name: "Urchin Analytics",
+    url: "/api/urchin-analytics/health",
+    requiredBy: "other",
+    notes: "Telemetry; optional",
+  },
+  {
+    key: "reef-feed-aggregator",
+    name: "Reef Feed Aggregator",
+    url: "/api/reef-feed-aggregator/health",
+    requiredBy: "other",
+    notes: "Personalized news & weather feeds",
+  },
+  {
+    key: "squid-ui",
+    name: "Squid UI (self)",
+    url: "/squidui", // simple self-check
+    requiredBy: "ui",
+    notes: "This frontend",
+  },
+];

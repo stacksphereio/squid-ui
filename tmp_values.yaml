@@ -1,0 +1,33 @@
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+  hosts:
+    - host: squid.guru-rep.sa-demo.beescloud.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: squid-ui-tls
+      hosts:
+        - squid.guru-rep.sa-demo.beescloud.com
+
+image:
+  repository: gururepservice/squid-ui
+  tag: "latest"
+  pullPolicy: Always
+
+replicaCount: 1
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  limits:
+    cpu: 250m
+    memory: 256Mi
+
+env:
+  - name: FEATURE_ADMIN_HEALTH
+    value: "true"

@@ -1,0 +1,40 @@
+diff --git a/src/index.js b/src/index.js
+index 327e3ee4..d4cb686b 100644
+--- a/src/index.js
++++ b/src/index.js
+@@ -1,11 +1,25 @@
++// src/index.js
+ import React from 'react';
+-import ReactDOM from 'react-dom/client';
+-import './index.css';
++import { createRoot } from 'react-dom/client';
+ import App from './App';
++import { loadRuntimeConfig } from './bootstrap';
+ 
+-const root = ReactDOM.createRoot(document.getElementById('root'));
+-root.render(
+-    <React.StrictMode>
+-        <App />
+-    </React.StrictMode>
+-);
+\ No newline at end of file
++// If you initialize the CloudBees Unify SDK, do it here after we load cfg.envKey.
++// (Pseudo example – replace with the exact Unify JS SDK init from docs.)
++// import { createFeatureManagementClient } from '@cloudbees/feature-management-js';
++
++(async () => {
++  try {
++    const cfg = await loadRuntimeConfig();
++
++    // Example: initialize feature mgmt with cfg.envKey (NO endpoint needed)
++    // const fm = createFeatureManagementClient({ environmentKey: cfg.envKey });
++    // await fm.ready();
++
++    const root = createRoot(document.getElementById('root'));
++    root.render(<App /* fm={fm} */ />);
++  } catch (e) {
++    console.error(e);
++    document.body.innerHTML = '<pre>Feature flags config failed to load.</pre>';
++  }
++})();
+\ No newline at end of file

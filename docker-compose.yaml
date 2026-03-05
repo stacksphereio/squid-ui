@@ -1,0 +1,7 @@
+  squid-ui:
+    build:
+      context: ./squid-ui
+    ports:
+      - "3000:80"
+    networks:
+      - squidstack-net

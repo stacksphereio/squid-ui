@@ -1,0 +1,186 @@
+/* ReefFeedPanel.css - Styles for Reef Feeds component */
+
+.reef-location {
+  color: #667085;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.reef-loading,
+.reef-error {
+  padding: 20px;
+  text-align: center;
+  color: #667085;
+  font-size: 0.9rem;
+}
+
+.reef-error {
+  color: #dc2626;
+}
+
+.reef-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 12px;
+  margin-top: 8px;
+}
+
+/* Weather Card */
+.reef-weather-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 8px;
+  padding: 14px;
+  color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.weather-header h3 {
+  margin: 0 0 8px 0;
+  font-size: 0.95rem;
+  opacity: 0.9;
+  font-weight: 600;
+}
+
+.weather-summary {
+  font-size: 0.95rem;
+  margin-bottom: 10px;
+  opacity: 0.95;
+}
+
+.weather-temp {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 6px;
+}
+
+.temp-value {
+  font-size: 2.5rem;
+  font-weight: 300;
+  line-height: 1;
+}
+
+.temp-unit {
+  font-size: 1.2rem;
+  margin-left: 4px;
+  margin-top: 6px;
+  opacity: 0.9;
+}
+
+.weather-feels-like {
+  font-size: 0.85rem;
+  opacity: 0.85;
+}
+
+/* News Ticker */
+.reef-news-ticker {
+  background: #f9fafb;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 14px;
+  min-height: 160px;
+}
+
+.news-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.news-header h3 {
+  margin: 0;
+  color: #111;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.news-indicators {
+  display: flex;
+  gap: 5px;
+}
+
+.news-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #d1d5db;
+  transition: all 0.3s ease;
+}
+
+.news-dot.active {
+  background: #0b3d91;
+  transform: scale(1.15);
+}
+
+.news-content {
+  min-height: 100px;
+}
+
+.news-item {
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.news-title {
+  color: #111;
+  font-size: 0.95rem;
+  margin: 0 0 8px 0;
+  line-height: 1.3;
+  font-weight: 500;
+}
+
+.news-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 0.8rem;
+  color: #667085;
+}
+
+.news-source {
+  font-weight: 500;
+}
+
+.news-time {
+  color: #9ca3af;
+}
+
+.news-link {
+  display: inline-block;
+  color: #0b3d91;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.85rem;
+  transition: color 0.2s ease;
+}
+
+.news-link:hover {
+  color: #083270;
+  text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .reef-content {
+    grid-template-columns: 1fr;
+  }
+
+  .temp-value {
+    font-size: 2rem;
+  }
+
+  .temp-unit {
+    font-size: 1rem;
+  }
+}

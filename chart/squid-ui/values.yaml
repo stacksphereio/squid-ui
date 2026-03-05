@@ -1,0 +1,113 @@
+# -- Override the chart name on install (e.g., "squid-ui-prod")
+nameOverride: ""
+fullnameOverride: ""
+
+# leave empty to use the release namespace; or set explicitly (e.g. "squid-prod")
+backendNamespace: ""
+
+image:
+  repository: your-dockerhub-user/squid-ui
+  tag: "latest"
+  pullPolicy: IfNotPresent
+  pullSecrets: []  # e.g. [{ name: regcred }]
+
+replicaCount: 1
+
+serviceAccount:
+  create: false
+  name: ""
+  annotations: {}
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext: {}
+securityContext: {}
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 80
+
+ingress:
+  enabled: true
+  className: "nginx"  # <- your ingressClassName
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    # nginx example hardening (optional):
+    # nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    # nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+  hosts:
+    - host: ui.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: squid-ui-tls
+      hosts:
+        - ui.example.com
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  limits:
+    cpu: 250m
+    memory: 256Mi
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+# HTTP health endpoints (served by nginx)
+probes:
+  liveness:
+    path: /healthz
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 2
+    failureThreshold: 3
+  readiness:
+    path: /healthz
+    initialDelaySeconds: 5
+    periodSeconds: 5
+    timeoutSeconds: 2
+    failureThreshold: 3
+
+env: []
+  # - name: FEATURE_ADMIN_HEALTH
+  #   value: "true"
+
+extraEnvFrom: []
+  # - configMapRef: { name: my-config }
+  # - secretRef: { name: my-secret }
+
+extraVolumes: []
+  # - name: nginx-conf
+  #   configMap: { name: nginx-conf }
+
+extraVolumeMounts: []
+  # - name: nginx-conf
+  #   mountPath: /etc/nginx/conf.d/default.conf
+  #   subPath: default.conf
+  #   readOnly: true
+
+# Optional HPA
+autoscaling:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 70
+  # targetMemoryUtilizationPercentage: 70
+
+# --- Feature Management (CloudBees FM) ---
+featureFlags:
+  enabled: true                 # keep your current setting
+  secretName: feature-mgmt      # name of the K8s Secret to use/create
+  secretKey: FM_KEY             # key inside the Secret (do not change)
+  mountPath: /usr/share/nginx/html/config
+  fileName: fm.json
+
+  # NEW: let the chart create the Secret when asked
+  createSecret: false           # set fa in workflow if you want Helm to create it
+  fmKey: ""                     # the *value* of the FM key (provided by workflow secret)
