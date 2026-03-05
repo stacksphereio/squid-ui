@@ -65,7 +65,7 @@ jobs:
       commit_sha: ${{ cloudbees.scm.sha }}
       uses_postgres: false
       uses_liquibase: false
-      hostname: foo.com
+      hostname: squid.integ.stacksphereio.se-main-demo.sa-demo.beescloud.com
       feature_flags_enabled: true
       feature_flags_secret_name: feature-mgmt
       feature_flags_secret_key: FM_KEY
