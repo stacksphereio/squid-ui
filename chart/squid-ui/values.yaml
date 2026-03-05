@@ -111,3 +111,5 @@ featureFlags:
   # NEW: let the chart create the Secret when asked
   createSecret: false           # set fa in workflow if you want Helm to create it
   fmKey: ""                     # the *value* of the FM key (provided by workflow secret)
+
+  # Note: FM namespace is hardcoded to 'squidstack.ui' in src/flags.js
