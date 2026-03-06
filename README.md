@@ -293,3 +293,6 @@ MIT (demo purposes only)
 # Testing Smart Tests evidence with URL fixes
 # Test correct UUID in URLs
 # Test cloudbees.io URL format
+
+<!-- Build trigger: 2026-03-06 15:30 UTC -->
+# Test component-app-deploy workflow refactoring
