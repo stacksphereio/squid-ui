@@ -294,5 +294,5 @@ MIT (demo purposes only)
 # Test correct UUID in URLs
 # Test cloudbees.io URL format
 
-<!-- Build trigger: 2026-03-06 15:30 UTC -->
-# Test component-app-deploy workflow refactoring
+<!-- Build trigger: 2026-03-06 15:45 UTC -->
+# Test idempotent database deployment with evidence
