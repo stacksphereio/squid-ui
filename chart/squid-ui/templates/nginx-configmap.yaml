@@ -27,7 +27,7 @@ data:
       set $kraken_auth             "squid-auth.{{ .Release.Namespace }}.svc.cluster.local:8080";
       set $nautilus_inventory      "nautilus-inventory.{{ .Release.Namespace }}.svc.cluster.local:8084";
       set $clam_catalog            "squid-catalog.{{ .Release.Namespace }}.svc.cluster.local:8080";
-      set $codlocker_assets        "codlocker-assets.{{ .Release.Namespace }}.svc.cluster.local:8080";
+      set $codlocker_assets        "squid-assets.{{ .Release.Namespace }}.svc.cluster.local:8080";
       set $squid_recommendations   "squid-recommendations.{{ .Release.Namespace }}.svc.cluster.local:8085";
       set $barnacle_reviews        "barnacle-reviews.{{ .Release.Namespace }}.svc.cluster.local:8080";
       set $manta_delivery          "manta-delivery.{{ .Release.Namespace }}.svc.cluster.local:8080";
