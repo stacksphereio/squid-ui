@@ -16,10 +16,10 @@ export const SERVICES = [
     notes: "Product catalog API",
   },
   {
-    key: "squid-feeds",
-    name: "Squid Feeds",
-    url: "/api/reef-feed-aggregator/health",
+    key: "squid-assets",
+    name: "Squid Assets",
+    url: "/api/squid-assets/health",
     requiredBy: "ui",
-    notes: "Feed aggregation service",
+    notes: "Asset serving service",
   },
 ];

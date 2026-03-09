@@ -28,6 +28,7 @@ data:
       set $nautilus_inventory      "nautilus-inventory.{{ .Release.Namespace }}.svc.cluster.local:8084";
       set $clam_catalog            "squid-catalog.{{ .Release.Namespace }}.svc.cluster.local:8080";
       set $codlocker_assets        "squid-assets.{{ .Release.Namespace }}.svc.cluster.local:8080";
+      set $squid_assets            "squid-assets.{{ .Release.Namespace }}.svc.cluster.local:8080";
       set $squid_recommendations   "squid-recommendations.{{ .Release.Namespace }}.svc.cluster.local:8085";
       set $barnacle_reviews        "barnacle-reviews.{{ .Release.Namespace }}.svc.cluster.local:8080";
       set $manta_delivery          "manta-delivery.{{ .Release.Namespace }}.svc.cluster.local:8080";
@@ -57,6 +58,14 @@ data:
       location /api/clam-catalog/ {
         rewrite ^/api/clam-catalog/?(.*)$ /$1 break;
         proxy_pass         http://$clam_catalog;
+        proxy_set_header   Host $host;
+        proxy_http_version 1.1;
+        proxy_set_header   Connection "";
+      }
+
+      location /api/squid-assets/ {
+        rewrite ^/api/squid-assets/?(.*)$ /$1 break;
+        proxy_pass         http://$squid_assets;
         proxy_set_header   Host $host;
         proxy_http_version 1.1;
         proxy_set_header   Connection "";
