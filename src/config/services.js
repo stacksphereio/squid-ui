@@ -22,4 +22,11 @@ export const SERVICES = [
     requiredBy: "ui",
     notes: "Asset serving service",
   },
+  {
+    key: "squid-feeds",
+    name: "Squid Feeds",
+    url: "/api/reef-feed-aggregator/health",
+    requiredBy: "ui",
+    notes: "Feed aggregation service",
+  },
 ];

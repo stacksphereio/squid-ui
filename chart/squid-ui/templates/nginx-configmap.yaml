@@ -36,7 +36,7 @@ data:
       set $cuttlefish_orders       "cuttlefish-orders.{{ .Release.Namespace }}.svc.cluster.local:8080";
       set $urchin_analytics        "urchin-analytics.{{ .Release.Namespace }}.svc.cluster.local:8080";
       set $jellyfish_notifications "jellyfish-notifications.{{ .Release.Namespace }}.svc.cluster.local:8083";
-      set $reef_feed_aggregator    "reef-feed-aggregator.{{ .Release.Namespace }}.svc.cluster.local:8080";
+      set $reef_feed_aggregator    "squid-feeds.{{ .Release.Namespace }}.svc.cluster.local:8080";
 
       # --- Proxies ---
       location /api/kraken-auth/ {
