@@ -18,8 +18,8 @@ function successLoginPayload() {
 
 // Build both relative and (optional) absolute URL handlers so tests stay resilient
 const loginPaths = [
-  '/api/kraken-auth/login',
-  'http://localhost:8080/api/kraken-auth/login',
+  '/api/squid-auth/login',
+  'http://localhost:8080/api/squid-auth/login',
 ];
 
 export const handlers = [
@@ -45,11 +45,11 @@ export const handlers = [
   ),
 
   // --- minimal admin stubs used by screens ---
-  rest.get('/api/kraken-auth/admin/users', (_req, res, ctx) => {
+  rest.get('/api/squid-auth/admin/users', (_req, res, ctx) => {
     return res(ctx.status(200), ctx.json([]));
   }),
 
-  rest.get('/api/kraken-auth/admin/roles', (_req, res, ctx) => {
+  rest.get('/api/squid-auth/admin/roles', (_req, res, ctx) => {
     return res(ctx.status(200), ctx.json([{ id: 1, name: 'admin' }]));
   }),
 ];
