@@ -2,7 +2,7 @@
 export async function login(username, password) {
   let res;
   try {
-    res = await fetch('/api/kraken-auth/login', {
+    res = await fetch('/api/squid-auth/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

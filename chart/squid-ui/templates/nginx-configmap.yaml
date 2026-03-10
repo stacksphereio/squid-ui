@@ -22,26 +22,26 @@ data:
       resolver kube-dns.kube-system.svc.cluster.local valid=10s ipv6=off;
       resolver_timeout 5s;
 
-      # --- All upstreams (namespace-aware, same ns as this release) ---
-      # If a backend runs in a DIFFERENT namespace, change only that one.
-      set $kraken_auth             "squid-auth.{{ .Release.Namespace }}.svc.cluster.local:8080";
-      set $nautilus_inventory      "nautilus-inventory.{{ .Release.Namespace }}.svc.cluster.local:8084";
-      set $clam_catalog            "squid-catalog.{{ .Release.Namespace }}.svc.cluster.local:8080";
-      set $codlocker_assets        "squid-assets.{{ .Release.Namespace }}.svc.cluster.local:8080";
+      # --- Active services (real backends in same namespace) ---
+      set $squid_auth              "squid-auth.{{ .Release.Namespace }}.svc.cluster.local:8080";
+      set $squid_catalog           "squid-catalog.{{ .Release.Namespace }}.svc.cluster.local:8080";
       set $squid_assets            "squid-assets.{{ .Release.Namespace }}.svc.cluster.local:8080";
+      set $squid_feeds             "squid-feeds.{{ .Release.Namespace }}.svc.cluster.local:8080";
+
+      # --- Future services (placeholders - not yet implemented) ---
       set $squid_recommendations   "squid-recommendations.{{ .Release.Namespace }}.svc.cluster.local:8085";
+      set $nautilus_inventory      "nautilus-inventory.{{ .Release.Namespace }}.svc.cluster.local:8084";
       set $barnacle_reviews        "barnacle-reviews.{{ .Release.Namespace }}.svc.cluster.local:8080";
       set $manta_delivery          "manta-delivery.{{ .Release.Namespace }}.svc.cluster.local:8080";
       set $octopus_payments        "octopus-payments.{{ .Release.Namespace }}.svc.cluster.local:8080";
       set $cuttlefish_orders       "cuttlefish-orders.{{ .Release.Namespace }}.svc.cluster.local:8080";
       set $urchin_analytics        "urchin-analytics.{{ .Release.Namespace }}.svc.cluster.local:8080";
       set $jellyfish_notifications "jellyfish-notifications.{{ .Release.Namespace }}.svc.cluster.local:8083";
-      set $reef_feed_aggregator    "squid-feeds.{{ .Release.Namespace }}.svc.cluster.local:8080";
 
       # --- Proxies ---
-      location /api/kraken-auth/ {
-        rewrite ^/api/kraken-auth/?(.*)$ /$1 break;
-        proxy_pass         http://$kraken_auth;
+      location /api/squid-auth/ {
+        rewrite ^/api/squid-auth/?(.*)$ /$1 break;
+        proxy_pass         http://$squid_auth;
         proxy_set_header   Host $host;
         proxy_http_version 1.1;
         proxy_set_header   Connection "";
@@ -55,9 +55,9 @@ data:
         proxy_set_header   Connection "";
       }
 
-      location /api/clam-catalog/ {
-        rewrite ^/api/clam-catalog/?(.*)$ /$1 break;
-        proxy_pass         http://$clam_catalog;
+      location /api/squid-catalog/ {
+        rewrite ^/api/squid-catalog/?(.*)$ /$1 break;
+        proxy_pass         http://$squid_catalog;
         proxy_set_header   Host $host;
         proxy_http_version 1.1;
         proxy_set_header   Connection "";
@@ -131,9 +131,9 @@ data:
         proxy_cache                off;
       }
 
-      location /api/reef-feed-aggregator/ {
-        rewrite ^/api/reef-feed-aggregator/?(.*)$ /$1 break;
-        proxy_pass         http://$reef_feed_aggregator;
+      location /api/squid-feeds/ {
+        rewrite ^/api/squid-feeds/?(.*)$ /$1 break;
+        proxy_pass         http://$squid_feeds;
         proxy_set_header   Host $host;
         proxy_http_version 1.1;
         proxy_set_header   Connection "";
@@ -141,7 +141,7 @@ data:
 
       # Asset serving proxy (images, etc)
       location /assets/ {
-        proxy_pass         http://$codlocker_assets;
+        proxy_pass         http://$squid_assets;
         proxy_set_header   Host $host;
         proxy_http_version 1.1;
         proxy_set_header   Connection "";

@@ -1,14 +1,14 @@
 # 🦑 squid-ui
 
 Frontend for **SquidStack**, built with **React** and served by **NGINX**.
-Handles user authentication (via `kraken-auth`), exposes admin views, product catalog browsing, integrates with **CloudBees Feature Management (Unify / Rox)**, and ships as a Helm-managed container.
+Handles user authentication (via `squid-auth`), exposes admin views, product catalog browsing, integrates with **CloudBees Feature Management (Unify / Rox)**, and ships as a Helm-managed container.
 
 ---
 
 ## ✨ Features
 
-- **Authentication** against `kraken-auth`
-  - `POST /api/kraken-auth/login`
+- **Authentication** against `squid-auth`
+  - `POST /api/squid-auth/login`
   - Persists JWT (`localStorage.squid.token`)
   - Persists user snapshot (`localStorage.squid.user`)
 - **Automatic session management**
@@ -46,18 +46,27 @@ Handles user authentication (via `kraken-auth`), exposes admin views, product ca
 
 `squid-ui` uses in-pod NGINX reverse proxies to call backend APIs under a single origin.
 
-| API | Upstream | Example |
-|-----|----------|---------|
-| Kraken Auth | `kraken-auth:8080` | `/api/kraken-auth/...` |
+### Active Services
+
+| API | Backend Service | Public API Path |
+|-----|-----------------|-----------------|
+| Squid Auth | `squid-auth:8080` | `/api/squid-auth/...` |
+| Squid Catalog | `squid-catalog:8080` | `/api/squid-catalog/...` |
+| Squid Assets | `squid-assets:8080` | `/api/squid-assets/...` or `/assets/...` |
+| Squid Feeds | `squid-feeds:8080` | `/api/squid-feeds/...` |
+
+### Future Services (Placeholders)
+
+| API | Backend Service | Public API Path |
+|-----|-----------------|-----------------|
 | Nautilus Inventory | `nautilus-inventory:8084` | `/api/nautilus-inventory/...` |
-| Clam Catalog | `clam-catalog:8080` | `/api/clam-catalog/...` |
 | Manta Delivery | `manta-delivery:8080` | `/api/manta-delivery/...` |
 | Octopus Payments | `octopus-payments:8080` | `/api/octopus-payments/...` |
 | Cuttlefish Orders | `cuttlefish-orders:8080` | `/api/cuttlefish-orders/...` |
 | Urchin Analytics | `urchin-analytics:8080` | `/api/urchin-analytics/...` |
 | Jellyfish Notifications | `jellyfish-notifications:8083` | `/api/jellyfish-notifications/...` |
 
-Each `/api/<service>/` path is rewritten and proxied internally by NGINX; no CORS setup required.
+Each public API path is rewritten and proxied internally by NGINX to the backend service; no CORS setup required.
 
 ---
 
@@ -71,8 +80,8 @@ Each `/api/<service>/` path is rewritten and proxied internally by NGINX; no COR
 2. **NGINX** running in the squid-ui container handles all routing:
    - Static assets (HTML, JS, CSS) are served directly from `/usr/share/nginx/html`
    - API calls to `/api/<service>/` are proxied to internal Kubernetes services
-   - Asset requests to `/assets/` are proxied to `codlocker-assets` for images
-3. **Internal services** communicate directly via Kubernetes service DNS (e.g., `clam-catalog:8080`)
+   - Asset requests to `/assets/` are proxied to `squid-assets` for images
+3. **Internal services** communicate directly via Kubernetes service DNS (e.g., `squid-catalog:8080`)
 4. **No external ingress** is configured for backend services
 
 ### Configuration files
@@ -92,19 +101,21 @@ The `nginx.conf` file defines all proxy rules:
 resolver kube-dns.kube-system.svc.cluster.local valid=10s ipv6=off;
 
 # Service variables (lazy DNS resolution)
-set $clam_catalog "clam-catalog:8080";
-set $codlocker_assets "codlocker-assets:8080";
+set $squid_auth "squid-auth:8080";
+set $squid_catalog "squid-catalog:8080";
+set $squid_assets "squid-assets:8080";
+set $squid_feeds "squid-feeds:8080";
 
-# API proxy - strips /api/clam-catalog/ prefix and forwards to service
-location /api/clam-catalog/ {
-  rewrite ^/api/clam-catalog/?(.*)$ /$1 break;
-  proxy_pass http://$clam_catalog;
+# API proxy - strips /api/squid-catalog/ prefix and forwards to squid-catalog
+location /api/squid-catalog/ {
+  rewrite ^/api/squid-catalog/?(.*)$ /$1 break;
+  proxy_pass http://$squid_catalog;
   proxy_set_header Host $host;
 }
 
-# Asset proxy - forwards /assets/ requests to codlocker-assets
+# Asset proxy - forwards /assets/ requests to squid-assets
 location /assets/ {
-  proxy_pass http://$codlocker_assets;
+  proxy_pass http://$squid_assets;
   proxy_set_header Host $host;
   expires 1y;
   add_header Cache-Control "public, immutable";
@@ -118,7 +129,7 @@ location / {
 
 ### Why use variables for upstream services?
 
-NGINX variables like `$clam_catalog` trigger **runtime DNS resolution**. Without variables, NGINX resolves DNS at startup only, which causes failures if backend services aren't ready yet. Variables allow the UI to start successfully even when dependencies are missing.
+NGINX variables like `$squid_catalog` trigger **runtime DNS resolution**. Without variables, NGINX resolves DNS at startup only, which causes failures if backend services aren't ready yet. Variables allow the UI to start successfully even when dependencies are missing.
 
 ### Adding a new backend service
 

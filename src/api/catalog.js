@@ -6,7 +6,7 @@ function authHeaders() {
 }
 
 export async function listProducts({ limit = 20, offset = 0, category = '' } = {}) {
-  let url = `/api/clam-catalog/api/products?limit=${limit}&offset=${offset}`;
+  let url = `/api/squid-catalog/api/products?limit=${limit}&offset=${offset}`;
   if (category) {
     url += `&category=${encodeURIComponent(category)}`;
   }
@@ -18,7 +18,7 @@ export async function listProducts({ limit = 20, offset = 0, category = '' } = {
 }
 
 export async function getProduct(id) {
-  const res = await fetch(`/api/clam-catalog/api/products/${encodeURIComponent(id)}`, {
+  const res = await fetch(`/api/squid-catalog/api/products/${encodeURIComponent(id)}`, {
     headers: { 'Accept': 'application/json' }
   });
   if (!res.ok) throw new Error(`getProduct failed: ${res.status}`);
@@ -26,7 +26,7 @@ export async function getProduct(id) {
 }
 
 export async function createProduct(data) {
-  const res = await fetch(`/api/clam-catalog/api/products`, {
+  const res = await fetch(`/api/squid-catalog/api/products`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -40,7 +40,7 @@ export async function createProduct(data) {
 }
 
 export async function updateProduct(id, data) {
-  const res = await fetch(`/api/clam-catalog/api/products/${encodeURIComponent(id)}`, {
+  const res = await fetch(`/api/squid-catalog/api/products/${encodeURIComponent(id)}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -54,7 +54,7 @@ export async function updateProduct(id, data) {
 }
 
 export async function deleteProduct(id) {
-  const res = await fetch(`/api/clam-catalog/api/products/${encodeURIComponent(id)}`, {
+  const res = await fetch(`/api/squid-catalog/api/products/${encodeURIComponent(id)}`, {
     method: 'DELETE',
     headers: {
       'Accept': 'application/json',

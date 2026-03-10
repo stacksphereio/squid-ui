@@ -6,7 +6,7 @@ function authHeaders() {
 }
 
 export async function listUsers({ limit = 200, offset = 0 } = {}) {
-  const res = await fetch(`/api/kraken-auth/admin/users?limit=${limit}&offset=${offset}`, {
+  const res = await fetch(`/api/squid-auth/admin/users?limit=${limit}&offset=${offset}`, {
     headers: { 'Accept': 'application/json', ...authHeaders() }
   });
   if (!res.ok) throw new Error(`listUsers failed: ${res.status}`);
@@ -14,7 +14,7 @@ export async function listUsers({ limit = 200, offset = 0 } = {}) {
 }
 
 export async function getUser(id) {
-  const res = await fetch(`/api/kraken-auth/admin/users/${encodeURIComponent(id)}`, {
+  const res = await fetch(`/api/squid-auth/admin/users/${encodeURIComponent(id)}`, {
     headers: { 'Accept': 'application/json', ...authHeaders() }
   });
   if (!res.ok) throw new Error(`getUser failed: ${res.status}`);
@@ -22,7 +22,7 @@ export async function getUser(id) {
 }
 
 export async function listRoles() {
-  const res = await fetch(`/api/kraken-auth/admin/roles`, {
+  const res = await fetch(`/api/squid-auth/admin/roles`, {
     headers: { 'Accept': 'application/json', ...authHeaders() }
   });
   if (!res.ok) throw new Error(`listRoles failed: ${res.status}`);
@@ -30,7 +30,7 @@ export async function listRoles() {
 }
 
 export async function listCountries() {
-  const res = await fetch(`/api/kraken-auth/admin/countries`, {
+  const res = await fetch(`/api/squid-auth/admin/countries`, {
     headers: { 'Accept': 'application/json', ...authHeaders() }
   });
   if (!res.ok) throw new Error(`listCountries failed: ${res.status}`);
@@ -38,7 +38,7 @@ export async function listCountries() {
 }
 
 export async function createUser(userData) {
-  const res = await fetch(`/api/kraken-auth/admin/users`, {
+  const res = await fetch(`/api/squid-auth/admin/users`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -55,7 +55,7 @@ export async function createUser(userData) {
 }
 
 export async function updateUser(id, userData) {
-  const res = await fetch(`/api/kraken-auth/admin/users/${encodeURIComponent(id)}`, {
+  const res = await fetch(`/api/squid-auth/admin/users/${encodeURIComponent(id)}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -72,7 +72,7 @@ export async function updateUser(id, userData) {
 }
 
 export async function updateUserRoles(id, roles) {
-  const res = await fetch(`/api/kraken-auth/admin/users/${encodeURIComponent(id)}/roles`, {
+  const res = await fetch(`/api/squid-auth/admin/users/${encodeURIComponent(id)}/roles`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -89,7 +89,7 @@ export async function updateUserRoles(id, roles) {
 }
 
 export async function resetUserPassword(id, password) {
-  const res = await fetch(`/api/kraken-auth/admin/users/${encodeURIComponent(id)}/password`, {
+  const res = await fetch(`/api/squid-auth/admin/users/${encodeURIComponent(id)}/password`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',

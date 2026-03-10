@@ -10,7 +10,7 @@ export async function getReefFeed() {
     throw new Error('No authentication token found');
   }
 
-  const res = await fetch('/api/reef-feed-aggregator/feeds', {
+  const res = await fetch('/api/squid-feeds/feeds', {
     method: 'GET',
     headers: {
       'Accept': 'application/json',
