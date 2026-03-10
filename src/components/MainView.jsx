@@ -3,7 +3,7 @@ import React from "react";
 import HealthDashboard from "./HealthDashboard";
 import AdminUsers from "../views/AdminUsers";
 import Products from "../views/Products";
-import ReefFeedPanel from "./ReefFeedPanel";
+import FeedPanel from "./FeedPanel";
 
 export default function MainView({ user, isAdmin, view, setView, flagSnap = {} }) {
   const { adminHealth, products: productsFlag } = flagSnap;
@@ -29,7 +29,7 @@ export default function MainView({ user, isAdmin, view, setView, flagSnap = {} }
                 </div>
               </div>
 
-              {flagSnap.reefFeed && <ReefFeedPanel />}
+              {flagSnap.reefFeed && <FeedPanel />}
 
               <div className="feature-cards">
                 {productsFlag && (

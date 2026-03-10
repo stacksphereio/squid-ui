@@ -1,10 +1,10 @@
-// reef.js - API client for Reef Feeds service
+// feeds.js - API client for Squid Feeds service
 
 /**
- * Get reef feed for the authenticated user
+ * Get feeds for the authenticated user
  * @returns {Promise<Object>} Feed response with weather and news
  */
-export async function getReefFeed() {
+export async function getFeed() {
   const token = localStorage.getItem('squid.token');
   if (!token) {
     throw new Error('No authentication token found');
@@ -20,7 +20,7 @@ export async function getReefFeed() {
 
   if (!res.ok) {
     const errorText = await res.text();
-    throw new Error(`Failed to fetch reef feed: ${res.status} ${errorText}`);
+    throw new Error(`Failed to fetch feed: ${res.status} ${errorText}`);
   }
 
   return res.json();

@@ -1,24 +1,24 @@
-/* ReefFeedPanel.css - Styles for Reef Feeds component */
+/* FeedPanel.css - Styles for Feed Panel component */
 
-.reef-location {
+.feed-location {
   color: #667085;
   font-size: 0.85rem;
   font-weight: 500;
 }
 
-.reef-loading,
-.reef-error {
+.feed-loading,
+.feed-error {
   padding: 20px;
   text-align: center;
   color: #667085;
   font-size: 0.9rem;
 }
 
-.reef-error {
+.feed-error {
   color: #dc2626;
 }
 
-.reef-content {
+.feed-content {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 12px;
@@ -26,7 +26,7 @@
 }
 
 /* Weather Card */
-.reef-weather-card {
+.feed-weather-card {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   border-radius: 8px;
   padding: 14px;
@@ -72,7 +72,7 @@
 }
 
 /* News Ticker */
-.reef-news-ticker {
+.feed-news-ticker {
   background: #f9fafb;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
@@ -172,7 +172,7 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .reef-content {
+  .feed-content {
     grid-template-columns: 1fr;
   }
 

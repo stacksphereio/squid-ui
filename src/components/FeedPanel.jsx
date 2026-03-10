@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { getReefFeed } from '../api/reef';
-import '../styles/ReefFeedPanel.css';
+import { getFeed } from '../api/feeds';
+import '../styles/FeedPanel.css';
 
-const ReefFeedPanel = () => {
+const FeedPanel = () => {
   const [feedData, setFeedData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -12,11 +12,11 @@ const ReefFeedPanel = () => {
     try {
       setLoading(true);
       setError(null);
-      const data = await getReefFeed();
+      const data = await getFeed();
       setFeedData(data);
       setCurrentNewsIndex(0); // Reset news index when new data arrives
     } catch (err) {
-      console.error('Failed to fetch reef feeds:', err);
+      console.error('Failed to fetch feeds:', err);
       setError(err.message);
     } finally {
       setLoading(false);
@@ -48,7 +48,7 @@ const ReefFeedPanel = () => {
   if (loading && !feedData) {
     return (
       <div className="panel">
-        <div className="reef-loading">Loading feeds...</div>
+        <div className="feed-loading">Loading feeds...</div>
       </div>
     );
   }
@@ -56,7 +56,7 @@ const ReefFeedPanel = () => {
   if (error) {
     return (
       <div className="panel">
-        <div className="reef-error">Failed to load feeds: {error}</div>
+        <div className="feed-error">Failed to load feeds: {error}</div>
       </div>
     );
   }
@@ -77,14 +77,14 @@ const ReefFeedPanel = () => {
     <div className="panel">
       <div className="panel-head">
         <h2 className="panel-title">Personalized Feeds</h2>
-        <div className="reef-location">
+        <div className="feed-location">
           {feedData.user.country} • {feedData.user.region}
         </div>
       </div>
 
-      <div className="reef-content">
+      <div className="feed-content">
         {hasWeather && (
-          <div className="reef-weather-card">
+          <div className="feed-weather-card">
             <div className="weather-header">
               <h3>Weather</h3>
             </div>
@@ -104,7 +104,7 @@ const ReefFeedPanel = () => {
         )}
 
         {hasNews && (
-          <div className="reef-news-ticker">
+          <div className="feed-news-ticker">
             <div className="news-header">
               <h3>News</h3>
               <div className="news-indicators">
@@ -147,4 +147,4 @@ const ReefFeedPanel = () => {
   );
 };
 
-export default ReefFeedPanel;
+export default FeedPanel;
