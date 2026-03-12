@@ -95,7 +95,7 @@ jobs:
   trigger-release:
     if: ${{ cloudbees.scm.branch == 'main' }}
     needs: [build, deploy-integ]
-    uses: github.com/stacksphereio/core-workflows/.cloudbees/workflows/application-release.yaml@main
+    uses: github.com/stacksphereio/core-workflows/.cloudbees/workflows/application-release.yaml@feature/squidstack-release-implementation
     with:
       stack_name: squid
       triggering_component: squid-ui
