@@ -93,7 +93,7 @@ jobs:
     vars: inherit
 
   trigger-release:
-    if: ${{ cloudbees.scm.branch == 'main' }}
+    if: ${{ cloudbees.scm.branch != 'main' }}  # Temporarily != for feature branch testing
     needs: [build, deploy-integ]
     uses: github.com/stacksphereio/core-workflows/.cloudbees/workflows/application-release.yaml@feature/squidstack-release-implementation
     with:
