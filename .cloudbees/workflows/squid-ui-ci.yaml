@@ -102,6 +102,9 @@ jobs:
       version: ${{ needs.build.outputs.VERSION }}
       target_environment: integ
       baseline_environment: prod
+      cb_org_id: "8d16bd77-d506-45e6-a0f4-8884ce16d301"
+      cb_application_id: "e3925a1f-9165-4767-9d6e-a96bb4edc80a"
+      cb_workflow_id: "95577bc1-5682-46d8-9246-0b13009e2b6e"
       dry_run: "true"  # Testing mode - validates full pipeline without creating actual release
     secrets: inherit
     vars: inherit
