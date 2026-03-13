@@ -105,6 +105,6 @@ jobs:
       cb_org_id: "03a71b92-0b3d-46eb-8669-a348abbf7be2"
       cb_application_id: "141f29cf-eefa-4a47-9f26-1e7af6e2de13"
       cb_workflow_id: "3ba243f5-8da2-403f-a244-5e2bca953896"
-      dry_run: "true"  # Testing mode - validates full pipeline without creating actual release
+      dry_run: "false"  # Live mode - creates actual release
     secrets: inherit
     vars: inherit
