@@ -50,7 +50,7 @@ jobs:
     if: ${{ cloudbees.scm.branch != 'main' }}
     needs: build
     environment: dev
-    uses: github.com/stacksphereio/core-workflows/.cloudbees/workflows/component-deploy.yaml@main
+    uses: github.com/stacksphereio/core-workflows/.cloudbees/workflows/component-deploy.yaml@feature/squidstack-release-implementation
     with:
       component_name: squid-ui
       version: ${{ needs.build.outputs.VERSION }}
@@ -73,7 +73,7 @@ jobs:
     if: ${{ cloudbees.scm.branch == 'main' }}
     needs: build
     environment: integ
-    uses: github.com/stacksphereio/core-workflows/.cloudbees/workflows/component-deploy.yaml@main
+    uses: github.com/stacksphereio/core-workflows/.cloudbees/workflows/component-deploy.yaml@feature/squidstack-release-implementation
     with:
       component_name: squid-ui
       version: ${{ needs.build.outputs.VERSION }}
